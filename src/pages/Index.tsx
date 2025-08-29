@@ -96,16 +96,23 @@ const Index = () => {
     setHasSearched(true);
     
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${encodeURIComponent(ingredient)}`);
+      const data = await response.json();
       
-      // For now, show mock data
-      setRecipes(mockRecipes);
-      
-      toast({
-        title: "Recipes found!",
-        description: `Found ${mockRecipes.length} delicious recipes for "${ingredient}"`,
-      });
+      if (data.meals) {
+        setRecipes(data.meals);
+        toast({
+          title: "Recipes found!",
+          description: `Found ${data.meals.length} delicious recipes for "${ingredient}"`,
+        });
+      } else {
+        setRecipes([]);
+        toast({
+          title: "No recipes found",
+          description: `No recipes found for "${ingredient}". Try a different ingredient!`,
+          variant: "destructive",
+        });
+      }
     } catch (error) {
       toast({
         title: "Search failed",
@@ -122,11 +129,18 @@ const Index = () => {
     setIsLoading(true);
     
     try {
-      // Simulate API call for recipe details
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${recipe.idMeal}`);
+      const data = await response.json();
       
-      // For now, show mock details (in real app, fetch from TheMealDB)
-      setSelectedRecipe(mockRecipeDetails);
+      if (data.meals && data.meals[0]) {
+        setSelectedRecipe(data.meals[0]);
+      } else {
+        toast({
+          title: "Error loading recipe",
+          description: "Recipe details not found.",
+          variant: "destructive",
+        });
+      }
     } catch (error) {
       toast({
         title: "Error loading recipe",
