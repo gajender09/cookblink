@@ -35,7 +35,7 @@ const SearchBar = ({ onSearch, isLoading = false }: SearchBarProps) => {
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
             <Input
               type="text"
-              placeholder="Enter an ingredient (e.g., chicken, pasta, tomato)..."
+              placeholder="What ingredient do you have? (e.g., chicken, pasta, tomato)..."
               value={ingredient}
               onChange={(e) => setIngredient(e.target.value)}
               onKeyPress={handleKeyPress}

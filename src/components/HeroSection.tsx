@@ -25,18 +25,17 @@ const HeroSection = ({ onSearch, isLoading = false }: HeroSectionProps) => {
         <div className="max-w-3xl mx-auto mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Sparkles className="w-6 h-6 text-primary animate-pulse" />
-            <span className="text-primary font-medium">For Busy Professionals</span>
+            <span className="text-primary font-medium">Recipe Ideas</span>
             <Sparkles className="w-6 h-6 text-primary animate-pulse" />
           </div>
           
           <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
-            Turn Your <span className="text-primary">Ingredients</span> into 
-            <br />Amazing <span className="text-secondary">Recipes</span>
+            What Do You Want to 
+            <br /><span className="text-primary">Eat Today?</span>
           </h1>
           
           <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-            Skip the endless browsing. Just tell us what you have in your kitchen, 
-            and we'll show you delicious recipes you can make right now.
+            Tell us what ingredients you have, and we'll find you the perfect recipe to cook something delicious right now!
           </p>
         </div>
 
