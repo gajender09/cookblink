@@ -58,8 +58,20 @@ const EnhancedRecipeModal = ({
   const steps = instructions.split(/\n|\r\n|\d+\./).filter(step => step.trim().length > 0);
 
   const getYouTubeEmbedUrl = (url: string) => {
-    const videoId = url.split('v=')[1]?.split('&')[0];
-    return videoId ? `https://www.youtube.com/embed/${videoId}` : null;
+    if (!url) return null;
+    
+    // Handle different YouTube URL formats
+    let videoId = null;
+    
+    if (url.includes('youtube.com/watch?v=')) {
+      videoId = url.split('v=')[1]?.split('&')[0];
+    } else if (url.includes('youtu.be/')) {
+      videoId = url.split('youtu.be/')[1]?.split('?')[0];
+    } else if (url.includes('youtube.com/embed/')) {
+      videoId = url.split('embed/')[1]?.split('?')[0];
+    }
+    
+    return videoId ? `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&controls=1` : null;
   };
 
   const embedUrl = recipe.strYoutube ? getYouTubeEmbedUrl(recipe.strYoutube) : null;
@@ -150,10 +162,10 @@ const EnhancedRecipeModal = ({
                           </Button>
                         )}
                         {recipe.strSource && (
-                          <Button variant="outline" asChild>
+                          <Button variant="outline" asChild className="flex-1">
                             <a href={recipe.strSource} target="_blank" rel="noopener noreferrer">
                               <ExternalLink className="w-4 h-4 mr-2" />
-                              Source
+                              View Source
                             </a>
                           </Button>
                         )}
@@ -252,17 +264,27 @@ const EnhancedRecipeModal = ({
                   </div>
                 </TabsContent>
 
-                <TabsContent value="video" className="h-full mt-4 mx-6 mb-6">
+                <TabsContent value="video" className="h-full mt-4 mx-6 mb-6 overflow-hidden">
                   <div className="h-full flex flex-col">
                     {embedUrl ? (
-                      <div className="flex-1 flex flex-col">
-                        <h3 className="text-lg font-semibold mb-4">Video Tutorial</h3>
-                        <div className="flex-1 bg-black rounded-lg overflow-hidden">
+                      <div className="flex-1 flex flex-col min-h-0">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="text-lg font-semibold">Video Tutorial</h3>
+                          <Button variant="outline" size="sm" asChild>
+                            <a href={recipe.strYoutube} target="_blank" rel="noopener noreferrer">
+                              <ExternalLink className="w-4 h-4 mr-2" />
+                              Open in YouTube
+                            </a>
+                          </Button>
+                        </div>
+                        <div className="flex-1 bg-black rounded-lg overflow-hidden min-h-[300px] relative">
                           <iframe
                             src={embedUrl}
-                            title={recipe.strMeal}
-                            className="w-full h-full"
+                            title={`${recipe.strMeal} - Cooking Video`}
+                            className="absolute inset-0 w-full h-full"
                             allowFullScreen
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerPolicy="strict-origin-when-cross-origin"
                             frameBorder="0"
                           />
                         </div>
@@ -270,10 +292,12 @@ const EnhancedRecipeModal = ({
                     ) : (
                       <div className="flex-1 flex items-center justify-center">
                         <div className="text-center">
-                          <Play className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Play className="w-8 h-8 text-muted-foreground" />
+                          </div>
                           <h3 className="text-lg font-semibold mb-2">No Video Available</h3>
-                          <p className="text-muted-foreground">
-                            This recipe doesn't have a video tutorial yet.
+                          <p className="text-muted-foreground max-w-sm">
+                            This recipe doesn't have a video tutorial yet. Check back later or try searching for cooking videos online!
                           </p>
                         </div>
                       </div>
