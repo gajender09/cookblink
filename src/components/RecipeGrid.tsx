@@ -1,4 +1,4 @@
-import RecipeCard from "./RecipeCard";
+import EnhancedRecipeCard from "./EnhancedRecipeCard";
 
 interface Recipe {
   idMeal: string;
@@ -12,9 +12,17 @@ interface RecipeGridProps {
   recipes: Recipe[];
   onRecipeClick: (recipe: Recipe) => void;
   isLoading?: boolean;
+  favorites?: string[];
+  onToggleFavorite?: (recipe: Recipe) => void;
 }
 
-const RecipeGrid = ({ recipes, onRecipeClick, isLoading = false }: RecipeGridProps) => {
+const RecipeGrid = ({ 
+  recipes, 
+  onRecipeClick, 
+  isLoading = false, 
+  favorites = [],
+  onToggleFavorite 
+}: RecipeGridProps) => {
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -42,10 +50,12 @@ const RecipeGrid = ({ recipes, onRecipeClick, isLoading = false }: RecipeGridPro
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-scale-in">
       {recipes.map((recipe) => (
-        <RecipeCard
+        <EnhancedRecipeCard
           key={recipe.idMeal}
           recipe={recipe}
           onClick={onRecipeClick}
+          isFavorite={favorites.includes(recipe.idMeal)}
+          onToggleFavorite={onToggleFavorite}
         />
       ))}
     </div>
