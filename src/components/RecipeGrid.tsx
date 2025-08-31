@@ -1,12 +1,5 @@
 import EnhancedRecipeCard from "./EnhancedRecipeCard";
-
-interface Recipe {
-  idMeal: string;
-  strMeal: string;
-  strMealThumb: string;
-  strCategory?: string;
-  strArea?: string;
-}
+import { Recipe } from "@/services/api";
 
 interface RecipeGridProps {
   recipes: Recipe[];

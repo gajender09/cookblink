@@ -6,7 +6,7 @@ interface Recipe {
   strArea?: string;
 }
 
-interface ShoppingItem {
+export interface ShoppingItem {
   id: string;
   ingredient: string;
   measure: string;

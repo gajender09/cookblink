@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Heart, ShoppingCart, Play, ExternalLink, ChefHat, Clock, Users, ArrowLeft, ArrowRight } from "lucide-react";
+import { X, Heart, ShoppingCart, Play, ExternalLink, ChefHat, Clock, Users, ArrowLeft, ArrowRight, Plus } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useShoppingList } from "@/hooks/useShoppingList";
 
 interface RecipeDetails {
   idMeal: string;
@@ -37,6 +38,7 @@ const EnhancedRecipeModal = ({
 }: EnhancedRecipeModalProps) => {
   const [activeTab, setActiveTab] = useState("overview");
   const [currentStep, setCurrentStep] = useState(0);
+  const { addMultipleIngredients } = useShoppingList();
 
   if (!recipe) return null;
 
@@ -75,6 +77,14 @@ const EnhancedRecipeModal = ({
   };
 
   const embedUrl = recipe.strYoutube ? getYouTubeEmbedUrl(recipe.strYoutube) : null;
+
+  const handleAddAllToShopping = () => {
+    const ingredientsList = ingredients.map(ing => ({
+      name: ing.name,
+      measure: ing.measure
+    }));
+    addMultipleIngredients(ingredientsList);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -115,11 +125,16 @@ const EnhancedRecipeModal = ({
                   variant="ghost"
                   size="icon"
                   onClick={onToggleFavorite}
-                  className={isFavorite ? 'text-red-500' : 'text-muted-foreground'}
+                  className={`transition-all duration-300 ${isFavorite ? 'text-red-500 hover:text-red-600' : 'text-muted-foreground hover:text-red-400'}`}
                 >
-                  <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />
+                  <Heart className={`w-5 h-5 transition-all duration-300 ${isFavorite ? 'fill-current scale-110' : 'hover:scale-110'}`} />
                 </Button>
-                <Button variant="ghost" size="icon">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={handleAddAllToShopping}
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
                   <ShoppingCart className="w-5 h-5" />
                 </Button>
                 <Button variant="ghost" size="icon" onClick={onClose}>
@@ -176,14 +191,25 @@ const EnhancedRecipeModal = ({
                     <div className="space-y-4">
                       <Card>
                         <CardContent className="p-4">
-                          <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
-                            <ShoppingCart className="w-5 h-5" />
-                            Ingredients ({ingredients.length})
-                          </h3>
+                          <div className="flex items-center justify-between mb-3">
+                            <h3 className="font-semibold text-lg flex items-center gap-2">
+                              <ShoppingCart className="w-5 h-5" />
+                              Ingredients ({ingredients.length})
+                            </h3>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              onClick={handleAddAllToShopping}
+                              className="text-xs"
+                            >
+                              <Plus className="w-3 h-3 mr-1" />
+                              Add All
+                            </Button>
+                          </div>
                           <ScrollArea className="h-40">
                             <ul className="space-y-2">
                               {ingredients.map((ingredient, index) => (
-                                <li key={index} className="flex justify-between items-center text-sm">
+                                <li key={index} className="flex justify-between items-center text-sm hover:bg-muted/50 p-2 rounded transition-colors">
                                   <span className="font-medium">{ingredient.name}</span>
                                   <span className="text-muted-foreground">{ingredient.measure}</span>
                                 </li>
