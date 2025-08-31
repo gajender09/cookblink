@@ -38,7 +38,7 @@ const EnhancedRecipeModal = ({
 }: EnhancedRecipeModalProps) => {
   const [activeTab, setActiveTab] = useState("overview");
   const [currentStep, setCurrentStep] = useState(0);
-  const { addMultipleIngredients } = useShoppingList();
+  const { addIngredient, addMultipleIngredients } = useShoppingList();
 
   if (!recipe) return null;
 
@@ -206,12 +206,25 @@ const EnhancedRecipeModal = ({
                               Add All
                             </Button>
                           </div>
-                          <ScrollArea className="h-40">
+                           <ScrollArea className="h-40">
                             <ul className="space-y-2">
                               {ingredients.map((ingredient, index) => (
-                                <li key={index} className="flex justify-between items-center text-sm hover:bg-muted/50 p-2 rounded transition-colors">
-                                  <span className="font-medium">{ingredient.name}</span>
-                                  <span className="text-muted-foreground">{ingredient.measure}</span>
+                                <li key={index} className="flex justify-between items-center text-sm hover:bg-muted/50 p-2 rounded transition-colors group">
+                                  <div className="flex-1">
+                                    <span className="font-medium">{ingredient.name}</span>
+                                    <span className="text-muted-foreground ml-2">- {ingredient.measure}</span>
+                                  </div>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      addIngredient(ingredient.name, ingredient.measure);
+                                    }}
+                                  >
+                                    <Plus className="w-3 h-3" />
+                                  </Button>
                                 </li>
                               ))}
                             </ul>

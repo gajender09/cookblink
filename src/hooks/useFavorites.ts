@@ -34,8 +34,10 @@ export const useFavorites = (): UseFavoritesReturn => {
     try {
       if (isCurrentlyFavorite) {
         removeFromFavorites(recipe.idMeal);
-        setFavorites(prev => prev.filter(id => id !== recipe.idMeal));
-        setFavoritesData(prev => prev.filter(fav => fav.idMeal !== recipe.idMeal));
+        const newFavorites = favorites.filter(id => id !== recipe.idMeal);
+        const newFavoritesData = favoritesData.filter(fav => fav.idMeal !== recipe.idMeal);
+        setFavorites(newFavorites);
+        setFavoritesData(newFavoritesData);
         
         toast({
           title: "Removed from favorites",
@@ -43,8 +45,10 @@ export const useFavorites = (): UseFavoritesReturn => {
         });
       } else {
         addToFavorites(recipe);
-        setFavorites(prev => [...prev, recipe.idMeal]);
-        setFavoritesData(prev => [...prev, recipe]);
+        const newFavorites = [...favorites, recipe.idMeal];
+        const newFavoritesData = [...favoritesData, recipe];
+        setFavorites(newFavorites);
+        setFavoritesData(newFavoritesData);
         
         toast({
           title: "Added to favorites",
@@ -58,7 +62,7 @@ export const useFavorites = (): UseFavoritesReturn => {
         variant: "destructive",
       });
     }
-  }, [checkIsFavorite, toast]);
+  }, [checkIsFavorite, toast, favorites, favoritesData]);
 
   const clearFavorites = useCallback(() => {
     try {
