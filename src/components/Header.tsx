@@ -44,14 +44,14 @@ const Header = ({ onNavigateToSection }: HeaderProps) => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-hero rounded-xl flex items-center justify-center shadow-glow animate-float">
-              <ChefHat className="w-7 h-7 text-primary-foreground" />
+            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center shadow-card">
+              <ChefHat className="w-6 h-6 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-foreground bg-gradient-hero bg-clip-text text-transparent">
+              <h1 className="text-xl font-bold text-foreground">
                 CookBlink
               </h1>
-              <p className="text-sm text-muted-foreground">Smart Recipe Discovery</p>
+              <p className="text-xs text-muted-foreground">Recipe Discovery</p>
             </div>
           </div>
 

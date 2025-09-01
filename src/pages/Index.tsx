@@ -52,15 +52,15 @@ const Index = () => {
         
         {/* Recipe Results Section */}
         {hasSearched && (
-          <section ref={recipesRef} className="py-24 px-4 bg-muted/20" id="recipes">
+          <section ref={recipesRef} className="py-16 px-4 bg-muted/30" id="recipes">
             <div className="container mx-auto">
-              <div className="text-center mb-16">
-                <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-                  Recipe <span className="bg-gradient-hero bg-clip-text text-transparent">Results</span>
+              <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                  Recipe Results
                 </h2>
-                <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                <p className="text-lg text-muted-foreground max-w-xl mx-auto">
                   {recipes.length > 0 
-                    ? `Found ${recipes.length} amazing recipes tailored to your ingredients` 
+                    ? `Found ${recipes.length} recipes for your search` 
                     : "No recipes found. Try different ingredients!"}
                 </p>
               </div>

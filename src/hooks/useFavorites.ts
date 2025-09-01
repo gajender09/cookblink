@@ -17,11 +17,27 @@ export const useFavorites = (): UseFavoritesReturn => {
   const [favoritesData, setFavoritesData] = useState<Recipe[]>([]);
   const { toast } = useToast();
 
-  // Load favorites on mount
+  // Load favorites on mount and listen for storage changes
   useEffect(() => {
     const loadedFavorites = getFavorites();
     setFavoritesData(loadedFavorites);
     setFavorites(loadedFavorites.map(fav => fav.idMeal));
+
+    // Listen for storage changes from other tabs/components
+    const handleStorageChange = () => {
+      const updatedFavorites = getFavorites();
+      setFavoritesData(updatedFavorites);
+      setFavorites(updatedFavorites.map(fav => fav.idMeal));
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    // Custom event for same-page updates
+    window.addEventListener('favoritesUpdated', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('favoritesUpdated', handleStorageChange);
+    };
   }, []);
 
   const checkIsFavorite = useCallback((recipeId: string): boolean => {
@@ -55,6 +71,9 @@ export const useFavorites = (): UseFavoritesReturn => {
           description: `${recipe.strMeal} added to your favorites`,
         });
       }
+
+      // Dispatch custom event to update all instances
+      window.dispatchEvent(new Event('favoritesUpdated'));
     } catch (error) {
       toast({
         title: "Error",

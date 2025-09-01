@@ -88,57 +88,40 @@ const EnhancedRecipeModal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden p-0">
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-hidden p-0">
         <div className="flex flex-col h-full">
           {/* Header */}
-          <DialogHeader className="p-6 pb-4 border-b">
+          <DialogHeader className="p-4 border-b">
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1 min-w-0">
-                <DialogTitle className="text-2xl font-bold text-foreground mb-2 line-clamp-2">
+                <DialogTitle className="text-xl font-bold text-foreground mb-2 line-clamp-2">
                   {recipe.strMeal}
                 </DialogTitle>
-                <div className="flex flex-wrap gap-2 mb-3">
+                <div className="flex flex-wrap gap-2">
                   {recipe.strCategory && (
-                    <Badge variant="secondary">
-                      <ChefHat className="w-3 h-3 mr-1" />
+                    <Badge variant="secondary" className="text-xs">
                       {recipe.strCategory}
                     </Badge>
                   )}
                   {recipe.strArea && (
-                    <Badge variant="outline">
+                    <Badge variant="outline" className="text-xs">
                       {recipe.strArea}
                     </Badge>
                   )}
-                  <Badge variant="outline">
-                    <Clock className="w-3 h-3 mr-1" />
-                    30-45 min
-                  </Badge>
-                  <Badge variant="outline">
-                    <Users className="w-3 h-3 mr-1" />
-                    2-4 servings
-                  </Badge>
                 </div>
               </div>
               
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={onToggleFavorite}
-                  className={`transition-all duration-300 ${isFavorite ? 'text-red-500 hover:text-red-600' : 'text-muted-foreground hover:text-red-400'}`}
+                  className={`h-8 w-8 ${isFavorite ? 'text-red-500' : 'text-muted-foreground hover:text-red-400'}`}
                 >
-                  <Heart className={`w-5 h-5 transition-all duration-300 ${isFavorite ? 'fill-current scale-110' : 'hover:scale-110'}`} />
+                  <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
                 </Button>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  onClick={handleAddAllToShopping}
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  <ShoppingCart className="w-5 h-5" />
-                </Button>
-                <Button variant="ghost" size="icon" onClick={onClose}>
-                  <X className="w-5 h-5" />
+                <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8">
+                  <X className="w-4 h-4" />
                 </Button>
               </div>
             </div>
@@ -147,21 +130,20 @@ const EnhancedRecipeModal = ({
           {/* Content */}
           <div className="flex-1 overflow-hidden">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-              <TabsList className="grid w-full grid-cols-3 mx-6 mt-4">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="cooking">Step-by-Step</TabsTrigger>
-                <TabsTrigger value="video">Watch & Learn</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-2 mx-4 mt-4">
+                <TabsTrigger value="overview">Recipe</TabsTrigger>
+                <TabsTrigger value="cooking">Instructions</TabsTrigger>
               </TabsList>
 
               <div className="flex-1 overflow-hidden">
-                <TabsContent value="overview" className="h-full mt-4 mx-6 mb-6">
-                  <div className="grid md:grid-cols-2 gap-6 h-full">
+                <TabsContent value="overview" className="h-full mt-4 mx-4 mb-4">
+                  <div className="grid md:grid-cols-2 gap-4 h-full">
                     {/* Recipe Image */}
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       <img
                         src={recipe.strMealThumb}
                         alt={recipe.strMeal}
-                        className="w-full h-64 object-cover rounded-lg shadow-card"
+                        className="w-full h-48 object-cover rounded-lg"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           target.src = "/placeholder.svg";
@@ -171,48 +153,53 @@ const EnhancedRecipeModal = ({
                       {/* Action Buttons */}
                       <div className="flex gap-2">
                         {recipe.strYoutube && (
-                          <Button variant="hero" className="flex-1" onClick={() => setActiveTab("video")}>
-                            <Play className="w-4 h-4 mr-2" />
-                            Watch Video
+                          <Button variant="outline" className="flex-1" asChild>
+                            <a href={recipe.strYoutube} target="_blank" rel="noopener noreferrer">
+                              <Play className="w-4 h-4 mr-2" />
+                              Watch Video
+                            </a>
                           </Button>
                         )}
                         {recipe.strSource && (
                           <Button variant="outline" asChild className="flex-1">
                             <a href={recipe.strSource} target="_blank" rel="noopener noreferrer">
                               <ExternalLink className="w-4 h-4 mr-2" />
-                              View Source
+                              Source
                             </a>
                           </Button>
                         )}
                       </div>
                     </div>
 
-                    {/* Ingredients & Instructions */}
-                    <div className="space-y-4">
+                    {/* Ingredients */}
+                    <div className="space-y-3">
                       <Card>
-                        <CardContent className="p-4">
+                        <CardContent className="p-3">
                           <div className="flex items-center justify-between mb-3">
-                            <h3 className="font-semibold text-lg flex items-center gap-2">
-                              <ShoppingCart className="w-5 h-5" />
+                            <h3 className="font-semibold text-base">
                               Ingredients ({ingredients.length})
                             </h3>
                             <Button 
                               variant="outline" 
                               size="sm" 
                               onClick={handleAddAllToShopping}
-                              className="text-xs"
+                              className="text-xs h-7"
                             >
                               <Plus className="w-3 h-3 mr-1" />
                               Add All
                             </Button>
                           </div>
-                           <ScrollArea className="h-40">
-                            <ul className="space-y-2">
+                          <ScrollArea className="h-64">
+                            <ul className="space-y-1">
                               {ingredients.map((ingredient, index) => (
                                 <li key={index} className="flex justify-between items-center text-sm hover:bg-muted/50 p-2 rounded transition-colors group">
                                   <div className="flex-1">
                                     <span className="font-medium">{ingredient.name}</span>
-                                    <span className="text-muted-foreground ml-2">- {ingredient.measure}</span>
+                                    {ingredient.measure && (
+                                      <span className="text-muted-foreground text-xs ml-2">
+                                        {ingredient.measure}
+                                      </span>
+                                    )}
                                   </div>
                                   <Button
                                     variant="ghost"
@@ -231,118 +218,23 @@ const EnhancedRecipeModal = ({
                           </ScrollArea>
                         </CardContent>
                       </Card>
-
-                      <Card>
-                        <CardContent className="p-4">
-                          <h3 className="font-semibold text-lg mb-3">Instructions</h3>
-                          <ScrollArea className="h-48">
-                            <div className="text-sm leading-relaxed text-muted-foreground whitespace-pre-line">
-                              {recipe.strInstructions}
-                            </div>
-                          </ScrollArea>
-                        </CardContent>
-                      </Card>
                     </div>
                   </div>
                 </TabsContent>
 
-                <TabsContent value="cooking" className="h-full mt-4 mx-6 mb-6">
-                  <div className="h-full flex flex-col">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-semibold">Guided Cooking Mode</h3>
-                      <div className="text-sm text-muted-foreground">
-                        Step {currentStep + 1} of {steps.length}
-                      </div>
-                    </div>
-
-                    <Card className="flex-1 flex flex-col">
-                      <CardContent className="p-6 flex-1 flex flex-col">
-                        <div className="flex-1 flex items-center justify-center">
-                          <div className="text-center max-w-2xl">
-                            <div className="text-3xl font-bold text-primary mb-2">
-                              Step {currentStep + 1}
-                            </div>
-                            <p className="text-lg leading-relaxed">
-                              {steps[currentStep]?.trim()}
-                            </p>
-                          </div>
+                <TabsContent value="cooking" className="h-full mt-4 mx-4 mb-4">
+                  <Card className="h-full">
+                    <CardContent className="p-4 h-full flex flex-col">
+                      <h3 className="font-semibold text-base mb-3">Instructions</h3>
+                      <ScrollArea className="flex-1">
+                        <div className="text-sm leading-relaxed text-foreground whitespace-pre-line">
+                          {recipe.strInstructions}
                         </div>
-
-                        <div className="flex justify-between items-center mt-6">
-                          <Button
-                            variant="outline"
-                            onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
-                            disabled={currentStep === 0}
-                          >
-                            <ArrowLeft className="w-4 h-4 mr-2" />
-                            Previous
-                          </Button>
-
-                          <div className="flex gap-1">
-                            {steps.map((_, index) => (
-                              <div
-                                key={index}
-                                className={`w-2 h-2 rounded-full ${
-                                  index === currentStep ? 'bg-primary' : 'bg-muted'
-                                }`}
-                              />
-                            ))}
-                          </div>
-
-                          <Button
-                            variant="hero"
-                            onClick={() => setCurrentStep(Math.min(steps.length - 1, currentStep + 1))}
-                            disabled={currentStep === steps.length - 1}
-                          >
-                            Next
-                            <ArrowRight className="w-4 h-4 ml-2" />
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
+                      </ScrollArea>
+                    </CardContent>
+                  </Card>
                 </TabsContent>
 
-                <TabsContent value="video" className="h-full mt-4 mx-6 mb-6 overflow-hidden">
-                  <div className="h-full flex flex-col">
-                    {embedUrl ? (
-                      <div className="flex-1 flex flex-col min-h-0">
-                        <div className="flex items-center justify-between mb-4">
-                          <h3 className="text-lg font-semibold">Video Tutorial</h3>
-                          <Button variant="outline" size="sm" asChild>
-                            <a href={recipe.strYoutube} target="_blank" rel="noopener noreferrer">
-                              <ExternalLink className="w-4 h-4 mr-2" />
-                              Open in YouTube
-                            </a>
-                          </Button>
-                        </div>
-                        <div className="flex-1 bg-black rounded-lg overflow-hidden min-h-[300px] relative">
-                          <iframe
-                            src={embedUrl}
-                            title={`${recipe.strMeal} - Cooking Video`}
-                            className="absolute inset-0 w-full h-full"
-                            allowFullScreen
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerPolicy="strict-origin-when-cross-origin"
-                            frameBorder="0"
-                          />
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex-1 flex items-center justify-center">
-                        <div className="text-center">
-                          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-                            <Play className="w-8 h-8 text-muted-foreground" />
-                          </div>
-                          <h3 className="text-lg font-semibold mb-2">No Video Available</h3>
-                          <p className="text-muted-foreground max-w-sm">
-                            This recipe doesn't have a video tutorial yet. Check back later or try searching for cooking videos online!
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </TabsContent>
               </div>
             </Tabs>
           </div>

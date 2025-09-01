@@ -32,23 +32,21 @@ const HeroSection = ({ onSearch, isLoading = false }: HeroSectionProps) => {
       <div className="relative z-10 container mx-auto px-4 text-center">
         <div className="max-w-5xl mx-auto">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-gradient-hero px-6 py-2 rounded-full text-primary-foreground text-sm font-medium mb-8 shadow-glow animate-scale-in">
+          <div className="inline-flex items-center gap-2 bg-primary px-4 py-2 rounded-full text-primary-foreground text-sm font-medium mb-8">
             <Sparkles className="w-4 h-4" />
-            <span>AI-Powered Recipe Discovery</span>
-            <Sparkles className="w-4 h-4" />
+            <span>Recipe Discovery</span>
           </div>
           
           {/* Main Heading */}
-          <h1 className="text-6xl md:text-8xl font-bold text-foreground mb-8 leading-tight">
-            Transform Your
+          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-8 leading-tight">
+            Discover Amazing
             <br />
-            <span className="bg-gradient-hero bg-clip-text text-transparent animate-glow">Kitchen Magic</span>
+            <span className="text-primary">Recipes</span>
           </h1>
           
           {/* Description */}
-          <p className="text-xl md:text-2xl text-muted-foreground mb-12 leading-relaxed max-w-3xl mx-auto">
-            Discover thousands of delicious recipes tailored to your ingredients. 
-            From quick weeknight dinners to gourmet masterpieces, we've got you covered.
+          <p className="text-lg md:text-xl text-muted-foreground mb-8 leading-relaxed max-w-2xl mx-auto">
+            Find delicious recipes based on the ingredients you have at home.
           </p>
 
           {/* Search Bar */}

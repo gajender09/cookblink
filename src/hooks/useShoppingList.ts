@@ -23,10 +23,24 @@ export const useShoppingList = (): UseShoppingListReturn => {
   const [shoppingList, setShoppingList] = useState<ShoppingItem[]>([]);
   const { toast } = useToast();
 
-  // Load shopping list on mount
+  // Load shopping list on mount and listen for changes
   useEffect(() => {
     const loadedList = getShoppingList();
     setShoppingList(loadedList);
+
+    // Listen for storage changes
+    const handleStorageChange = () => {
+      const updatedList = getShoppingList();
+      setShoppingList(updatedList);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('shoppingListUpdated', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('shoppingListUpdated', handleStorageChange);
+    };
   }, []);
 
   const addIngredient = useCallback((ingredient: string, measure: string) => {
@@ -53,6 +67,9 @@ export const useShoppingList = (): UseShoppingListReturn => {
         title: "Added to shopping list",
         description: `${ingredient} added to your shopping list`,
       });
+
+      // Dispatch custom event to update all instances
+      window.dispatchEvent(new Event('shoppingListUpdated'));
     } catch (error) {
       toast({
         title: "Error",
@@ -85,6 +102,9 @@ export const useShoppingList = (): UseShoppingListReturn => {
           title: "Added to shopping list",
           description: `${addedCount} ingredient${addedCount > 1 ? 's' : ''} added to your shopping list`,
         });
+
+        // Dispatch custom event to update all instances
+        window.dispatchEvent(new Event('shoppingListUpdated'));
       } else {
         toast({
           title: "No new items",
