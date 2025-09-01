@@ -1,11 +1,17 @@
+import { useState, useRef } from "react";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
+import FeaturesSection from "@/components/FeaturesSection";
+import AboutSection from "@/components/AboutSection";
 import RecipeGrid from "@/components/RecipeGrid";
 import EnhancedRecipeModal from "@/components/EnhancedRecipeModal";
 import { useRecipes } from "@/hooks/useRecipes";
 import { useFavorites } from "@/hooks/useFavorites";
 
 const Index = () => {
+  const [currentSection, setCurrentSection] = useState('home');
+  const recipesRef = useRef<HTMLDivElement>(null);
+  
   const {
     recipes,
     selectedRecipe,
@@ -22,24 +28,40 @@ const Index = () => {
     toggleFavorite
   } = useFavorites();
 
+  const handleNavigateToSection = (section: string) => {
+    setCurrentSection(section);
+    
+    if (section === 'recipes' && recipesRef.current) {
+      recipesRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <Header onNavigateToSection={handleNavigateToSection} />
       
-      <main>
+      <main className="overflow-hidden">
+        {/* Hero Section */}
         <HeroSection onSearch={searchByIngredients} isLoading={isLoading} />
         
+        {/* Features Section */}
+        <FeaturesSection />
+        
+        {/* About Section */}
+        <AboutSection />
+        
+        {/* Recipe Results Section */}
         {hasSearched && (
-          <section className="py-12 px-4">
+          <section ref={recipesRef} className="py-24 px-4 bg-muted/20" id="recipes">
             <div className="container mx-auto">
-              <div className="mb-8">
-                <h2 className="text-3xl font-bold text-foreground text-center mb-2">
-                  Recipe Results
+              <div className="text-center mb-16">
+                <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+                  Recipe <span className="bg-gradient-hero bg-clip-text text-transparent">Results</span>
                 </h2>
-                <p className="text-muted-foreground text-center">
+                <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                   {recipes.length > 0 
-                    ? `Found ${recipes.length} delicious recipes for you` 
-                    : "No recipes found"}
+                    ? `Found ${recipes.length} amazing recipes tailored to your ingredients` 
+                    : "No recipes found. Try different ingredients!"}
                 </p>
               </div>
               
@@ -53,6 +75,26 @@ const Index = () => {
             </div>
           </section>
         )}
+
+        {/* Footer */}
+        <footer className="bg-card border-t border-border py-12 px-4">
+          <div className="container mx-auto text-center">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <div className="w-10 h-10 bg-gradient-hero rounded-xl flex items-center justify-center shadow-glow">
+                <span className="text-2xl">👨‍🍳</span>
+              </div>
+              <h3 className="text-2xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                CookBlink
+              </h3>
+            </div>
+            <p className="text-muted-foreground mb-4">
+              Transform your cooking experience with AI-powered recipe discovery
+            </p>
+            <p className="text-sm text-muted-foreground">
+              © 2024 CookBlink. Made with ❤️ for food lovers everywhere.
+            </p>
+          </div>
+        </footer>
       </main>
 
       <EnhancedRecipeModal 

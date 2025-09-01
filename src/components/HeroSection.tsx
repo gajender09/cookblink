@@ -1,4 +1,6 @@
-import { Sparkles, Clock, Users, TrendingUp } from "lucide-react";
+import { Sparkles, Clock, Users, TrendingUp, Star, Award, Zap } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import SearchBar from "./SearchBar";
 import heroImage from "@/assets/hero-cooking.jpg";
 
@@ -13,78 +15,106 @@ const HeroSection = ({ onSearch, isLoading = false }: HeroSectionProps) => {
   };
 
   return (
-    <section className="relative py-20 px-4 overflow-hidden">
-      {/* Background */}
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Animated Background */}
       <div className="absolute inset-0 z-0">
-        <img
-          src={heroImage}
-          alt="Fresh cooking ingredients"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/95" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-secondary/20" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,background_70%)]" />
+        
+        {/* Floating Elements */}
+        <div className="absolute top-20 left-10 w-20 h-20 bg-gradient-hero rounded-full opacity-20 animate-float" />
+        <div className="absolute top-40 right-20 w-16 h-16 bg-gradient-accent rounded-full opacity-30 animate-float" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-40 left-20 w-24 h-24 bg-secondary/20 rounded-full animate-float" style={{ animationDelay: '2s' }} />
+        <div className="absolute bottom-20 right-10 w-12 h-12 bg-primary/30 rounded-full animate-float" style={{ animationDelay: '0.5s' }} />
       </div>
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto text-center">
-        <div className="max-w-4xl mx-auto mb-8">
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <Sparkles className="w-6 h-6 text-primary animate-pulse" />
-            <span className="text-primary font-medium tracking-wide">Smart Recipe Discovery</span>
-            <Sparkles className="w-6 h-6 text-primary animate-pulse" />
+      <div className="relative z-10 container mx-auto px-4 text-center">
+        <div className="max-w-5xl mx-auto">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 bg-gradient-hero px-6 py-2 rounded-full text-primary-foreground text-sm font-medium mb-8 shadow-glow animate-scale-in">
+            <Sparkles className="w-4 h-4" />
+            <span>AI-Powered Recipe Discovery</span>
+            <Sparkles className="w-4 h-4" />
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6 leading-tight">
-            Turn Your <span className="text-primary">Ingredients</span>
-            <br />Into <span className="text-secondary">Amazing Meals</span>
+          {/* Main Heading */}
+          <h1 className="text-6xl md:text-8xl font-bold text-foreground mb-8 leading-tight">
+            Transform Your
+            <br />
+            <span className="bg-gradient-hero bg-clip-text text-transparent animate-glow">Kitchen Magic</span>
           </h1>
           
-          <p className="text-xl text-muted-foreground mb-8 leading-relaxed max-w-2xl mx-auto">
-            Stop wondering what to cook! Just tell us what's in your kitchen, and we'll show you delicious recipes you can make right now.
+          {/* Description */}
+          <p className="text-xl md:text-2xl text-muted-foreground mb-12 leading-relaxed max-w-3xl mx-auto">
+            Discover thousands of delicious recipes tailored to your ingredients. 
+            From quick weeknight dinners to gourmet masterpieces, we've got you covered.
           </p>
 
-          {/* Quick Stats */}
-          <div className="flex justify-center items-center gap-8 mb-8 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-primary" />
-              <span>Quick Search</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-primary" />
-              <span>1000+ Recipes</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-primary" />
-              <span>Smart Matching</span>
-            </div>
+          {/* Search Bar */}
+          <div className="mb-12">
+            <SearchBar onSearch={(ingredient) => onSearch([ingredient])} isLoading={isLoading} />
           </div>
-        </div>
 
-        <SearchBar onSearch={(ingredient) => onSearch([ingredient])} isLoading={isLoading} />
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
+            <Card className="bg-gradient-card border-0 shadow-card hover:shadow-elevated transition-all duration-300">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 bg-gradient-hero rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Zap className="w-6 h-6 text-primary-foreground" />
+                </div>
+                <h3 className="text-2xl font-bold text-foreground mb-2">10,000+</h3>
+                <p className="text-muted-foreground">Recipes Available</p>
+              </CardContent>
+            </Card>
 
-        {/* Popular Ingredients */}
-        <div className="mt-8">
-          <p className="text-sm text-muted-foreground mb-4">Try these popular ingredients:</p>
-          <div className="flex flex-wrap justify-center gap-3">
-            {[
-              { name: "chicken", emoji: "🐔" },
-              { name: "pasta", emoji: "🍝" },
-              { name: "tomato", emoji: "🍅" },
-              { name: "rice", emoji: "🍚" },
-              { name: "beef", emoji: "🥩" },
-              { name: "salmon", emoji: "🐟" },
-              { name: "egg", emoji: "🥚" },
-              { name: "cheese", emoji: "🧀" }
-            ].map((ingredient) => (
-              <button
-                key={ingredient.name}
-                onClick={() => handleSingleSearch(ingredient.name)}
-                className="px-4 py-2 bg-background/60 backdrop-blur-sm border border-border/50 rounded-full text-sm text-foreground hover:bg-accent hover:border-primary/50 transition-all duration-300 capitalize flex items-center gap-2"
-                disabled={isLoading}
-              >
-                <span>{ingredient.emoji}</span>
-                <span>{ingredient.name}</span>
-              </button>
-            ))}
+            <Card className="bg-gradient-card border-0 shadow-card hover:shadow-elevated transition-all duration-300">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 bg-gradient-hero rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Star className="w-6 h-6 text-primary-foreground" />
+                </div>
+                <h3 className="text-2xl font-bold text-foreground mb-2">4.9★</h3>
+                <p className="text-muted-foreground">User Rating</p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-card border-0 shadow-card hover:shadow-elevated transition-all duration-300">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 bg-gradient-hero rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Award className="w-6 h-6 text-primary-foreground" />
+                </div>
+                <h3 className="text-2xl font-bold text-foreground mb-2">500K+</h3>
+                <p className="text-muted-foreground">Happy Cooks</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Popular Ingredients */}
+          <div className="max-w-4xl mx-auto">
+            <p className="text-lg text-muted-foreground mb-6">Try these popular ingredients:</p>
+            <div className="flex flex-wrap justify-center gap-3">
+              {[
+                { name: "chicken", emoji: "🐔", color: "bg-orange-100 hover:bg-orange-200 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300" },
+                { name: "pasta", emoji: "🍝", color: "bg-yellow-100 hover:bg-yellow-200 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300" },
+                { name: "tomato", emoji: "🍅", color: "bg-red-100 hover:bg-red-200 text-red-800 dark:bg-red-900/20 dark:text-red-300" },
+                { name: "rice", emoji: "🍚", color: "bg-gray-100 hover:bg-gray-200 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300" },
+                { name: "beef", emoji: "🥩", color: "bg-red-100 hover:bg-red-200 text-red-800 dark:bg-red-900/20 dark:text-red-300" },
+                { name: "salmon", emoji: "🐟", color: "bg-pink-100 hover:bg-pink-200 text-pink-800 dark:bg-pink-900/20 dark:text-pink-300" },
+                { name: "egg", emoji: "🥚", color: "bg-yellow-100 hover:bg-yellow-200 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300" },
+                { name: "cheese", emoji: "🧀", color: "bg-amber-100 hover:bg-amber-200 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300" }
+              ].map((ingredient) => (
+                <Button
+                  key={ingredient.name}
+                  variant="outline"
+                  onClick={() => handleSingleSearch(ingredient.name)}
+                  disabled={isLoading}
+                  className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 hover:scale-105 capitalize ${ingredient.color} border-0 shadow-sm hover:shadow-md`}
+                >
+                  <span className="mr-2 text-lg">{ingredient.emoji}</span>
+                  <span>{ingredient.name}</span>
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
